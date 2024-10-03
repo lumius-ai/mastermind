@@ -3,7 +3,7 @@ require_relative '../lib/mastermind_game'
 describe MastermindGame do
   describe "Constructor Testing" do
     r = MastermindGame.new()
-    j = MastermindGame.new(3, "abdc")
+    j = MastermindGame.new({"guesses" => 3, "code" =>"abdc"})
 
     it "Inits with the default constructor" do
       expect(r.guesses_left).to eql(10)
@@ -20,7 +20,7 @@ describe MastermindGame do
   end
 
   describe "Making Guesses testing" do
-    r = MastermindGame.new(3, "9999")
+    r = MastermindGame.new({"guesses" => 3, 'code' => "9999"})
 
     it "Stores a first guess" do
       r.make_guess("1122")
@@ -41,7 +41,7 @@ describe MastermindGame do
   end
 
   describe "Generating Hints testing" do
-    r = MastermindGame.new(3, "4567")
+    r = MastermindGame.new({"guesses" => 3, "code" => "4567"})
 
     it "Identifies no pins(wrong value, wrong location)" do
       expect(r.generate_hint("1111")).to eql("----")
@@ -57,8 +57,8 @@ describe MastermindGame do
   end
 
   describe "Determining win condition" do
-    w = MastermindGame.new(1, "1111")
-    l = MastermindGame.new(1, "1111")
+    w = MastermindGame.new({"guesses" => 1, "code" => "1111"})
+    l = MastermindGame.new({"guesses" => 1, "code" => "1111"})
 
     it "Identifies a game in progress" do
       expect(w.is_win?).to eql(false)
@@ -78,12 +78,13 @@ describe MastermindGame do
   end
 
   describe "Proper to_string display" do
-    r = MastermindGame.new(4, "5556")
+    r = MastermindGame.new({"guesses" => 4, "code" => "5556"})
     r.make_guess("6111")
     r.make_guess("1116")
     r.make_guess("1111")
 
-    expect(r.to_s).to eql("MASTERMIND GAME\n--------------------\nGuess: - - - -   Hint: ----\nGuess: 1 1 1 1   Hint: ----\nGuess: 1 1 1 6   Hint: B---\nGuess: 6 1 1 1   Hint: Y---\nGUESSES LEFT: 1")
-
+    it "Displays to string properly" do
+      expect(r.to_s).to eql("MASTERMIND GAME\n--------------------\nGuess: - - - -   Hint: ----\nGuess: 1 1 1 1   Hint: ----\nGuess: 1 1 1 6   Hint: B---\nGuess: 6 1 1 1   Hint: Y---\nGUESSES LEFT: 1")
+    end
   end
 end

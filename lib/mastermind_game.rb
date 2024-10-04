@@ -23,56 +23,6 @@ class MastermindGame
     @game_board = []
   end
 
-  # Makes guess
-  def make_guess(string)
-    if string.length != 4
-      return false
-    else
-      row = GameRow.new(string)
-      row.hint_write(generate_hint(string))
-      @game_board.append(row)
-      @guesses_left -= 1
-      return true
-    end
-
-  end
-  
-  #Generates hint
-  def generate_hint(guess)
-    output = []
-    guess = guess.chars
-
-    guess.each_with_index do |element, index|
-      if(@game_code.include?(element))
-        if(guess[index] == @game_code[index])
-          output.append("B")
-        else
-          output.append("Y")
-        end
-      end
-    end
-
-    while output.length != 4
-      output.append('-')
-    end
-
-    return output.join
-
-
-  end
-
-  # Determines win or loss
-  def is_win?()
-    if @game_board.length == 0
-      return false
-    end
-
-    if(@game_board[-1].hint.join == 'BBBB')
-      return true
-    else
-      return false
-    end
-  end
 
   # Runs one game
   def run_game()
@@ -184,5 +134,56 @@ class MastermindGame
       out += '-'
     end
     return out
+  end
+
+  # Makes guess
+  def make_guess(string)
+    if string.length != 4
+      return false
+    else
+      row = GameRow.new(string)
+      row.hint_write(generate_hint(string))
+      @game_board.append(row)
+      @guesses_left -= 1
+      return true
+    end
+
+  end
+  
+  #Generates hint
+  def generate_hint(guess)
+    output = []
+    guess = guess.chars
+
+    guess.each_with_index do |element, index|
+      if(@game_code.include?(element))
+        if(guess[index] == @game_code[index])
+          output.append("B")
+        else
+          output.append("Y")
+        end
+      end
+    end
+
+    while output.length != 4
+      output.append('-')
+    end
+
+    return output.join
+
+
+  end
+
+  # Determines win or loss
+  def is_win?()
+    if @game_board.length == 0
+      return false
+    end
+
+    if(@game_board[-1].hint.join == 'BBBB')
+      return true
+    else
+      return false
+    end
   end
 end

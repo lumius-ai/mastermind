@@ -1,37 +1,28 @@
-
 class GameRow
   attr_accessor :guess, :hint
 
-  def initialize(guess_string = "----")
+  def initialize(guess_string = '----')
     @guess = guess_string.chars
-    @hint = "----".chars
-    
+    @hint = '----'.chars
   end
 
   def guess_write(new_guess)
     g = new_guess.chars
-    if g.length != 4
-      return false
-    else
-      @guess = g
-      return true
-    end
+    return false if g.length != 4
 
+    @guess = g
+    true
   end
 
   def hint_write(new_hint)
     h = new_hint.chars
-    if h.length != 4
-      return false
-    else
-      @hint = h
-      return true
-    end
+    return false if h.length != 4
+
+    @hint = h
+    true
   end
 
-  def to_s()
-    return("Guess: #{@guess.join(" ")}   Hint: #{@hint.join()}")
-
+  def to_s
+    "Guess: #{@guess.join(' ')}   Hint: #{@hint.join}"
   end
-
 end

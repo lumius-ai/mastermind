@@ -1,7 +1,7 @@
 require_relative './game_row'
 
 class MastermindGame
-  attr_accessor :game_code, :game_board, :guesses_left
+  attr_accessor :game_code, :game_board, :guesses_left, :mode
 
   def initialize(args = {})
     # Init number of guesses
@@ -84,6 +84,7 @@ class MastermindGame
         mode = ""
       end
     end
+    @mode = mode
 
     case mode
     when 'g'
@@ -106,6 +107,8 @@ class MastermindGame
       return
     when 'c'
       code = ""
+      prng1 = Random.new(Random.seed)
+      pins = ""
       puts("Player is codemaster")
       while code == ""
         puts("Enter code: ")
@@ -117,27 +120,19 @@ class MastermindGame
           @game_code = code
         end
       end
+      # First board display
+      puts(self)
+
+      #AI random guess loop
       while not self.is_win? and @guesses_left > 0
-        prng1 = Random.new(Random.seed)
-        num = ("%04d" % prng1.rand(9999)).to_s
-        computer_guess = GameRow.new(num)
-
-        pins = ""
-        while pins == ""
-          puts("Computer Guesses #{num}, code is #{@game_code}. Place B or Y pins")
-          pins = gets.chomp
-
-          if(pins.length != 4) and numeric?(pins)
-            
-          end
-        end
-
+        # sleep 1 second
+        sleep(1)
+        self.make_guess(("%04d" % prng1.rand(9999)).to_s)
+        puts(self)
       end
-      puts("This part is not implemented yet!")
-      return
+      self.is_win? ? puts("Computer wins") : puts("Computer loses")
     end
-
-
+      
     
   end
   # Display whole board to terminal
@@ -145,7 +140,7 @@ class MastermindGame
     copy_board = array_copy(@game_board)
 
     outstring = "MASTERMIND GAME\n--------------------\n"
-    if(self.is_win?)
+    if(self.is_win? or @mode = 'c')
       outstring += "CODE: #{@game_code.chars.join(" ")}\n--------------------\n"
     else
       outstring += "CODE: #{"????".chars.join(" ")}\n--------------------\n"
@@ -160,16 +155,34 @@ class MastermindGame
   end
 
   private
+  # Boolean is the input numeric?
   def numeric?(instring)
     return instring.match?(/[[:digit:]]/)
   end
 
+  # Copies an array
   def array_copy(in_array)
     out_array = []
     for i in 0...in_array.length
       out_array.append(in_array[i])
     end
-
     return out_array
+  end
+
+  # Generates the pins for hints
+  def generate_pins(in_string)
+    out = ""
+    if in_string == ""
+      return "----"
+    end
+    in_string.chars.each do |character|
+      if character.upcase == 'B' or character.upcase == 'Y' or character == '-'
+        out += character
+      end
+    end
+    while out.length != 4
+      out += '-'
+    end
+    return out
   end
 end

@@ -83,8 +83,17 @@ describe MastermindGame do
     r.make_guess("1116")
     r.make_guess("1111")
 
-    it "Displays to string properly" do
-      expect(r.to_s).to eql("MASTERMIND GAME\n--------------------\nGuess: - - - -   Hint: ----\nGuess: 1 1 1 1   Hint: ----\nGuess: 1 1 1 6   Hint: B---\nGuess: 6 1 1 1   Hint: Y---\nGUESSES LEFT: 1")
+    j = MastermindGame.new({"guesses" => 3, "code" => "1111"})
+    j.make_guess("4444")
+    j.make_guess("4414")
+    j.make_guess("1111")
+
+    it "Hides code in ongoing game" do
+      expect(r.to_s).to eql("MASTERMIND GAME\n--------------------\nCODE: ? ? ? ?\n--------------------\nGuess: 1 1 1 1   Hint: ----\nGuess: 1 1 1 6   Hint: B---\nGuess: 6 1 1 1   Hint: Y---\nGUESSES LEFT: 1")
+    end
+
+    it "Shows code on game over" do
+      expect(j.to_s).to eql("MASTERMIND GAME\n--------------------\nCODE: 1 1 1 1\n--------------------\nGuess: 1 1 1 1   Hint: BBBB\nGuess: 4 4 1 4   Hint: B---\nGuess: 4 4 4 4   Hint: ----\nGUESSES LEFT: 0")
     end
   end
 end
